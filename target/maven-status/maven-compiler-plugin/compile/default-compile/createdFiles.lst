@@ -1,0 +1,9 @@
+veterinariaPOO\controlador\Controlador.class
+principal\veterinariapoo\VeterinariaPOO.class
+veterinariaPOO\modelo\Colaborador.class
+veterinariaPOO\modelo\Veterinario.class
+veterinariaPOO\modelo\Mascota.class
+veterinariaPOO\modelo\Recepcionista.class
+veterinariaPOO\modelo\Persona.class
+veterinariaPOO\vista\Vista.class
+veterinariaPOO\modelo\Propietario.class
