@@ -25,4 +25,28 @@ public class MascotaConvencional extends Mascota{
         return 0.0;
     }
     
+    public void agregarVacunas(Vacuna vacuna){
+        if(vacuna!= null){
+            this.esquemaVacunas.add(vacuna);
+        }
+    }
+
+    public String getRaza() {
+        return raza;
+    }
+
+    public List<Vacuna> getEsquemaVacunas() {
+        return esquemaVacunas;
+    }
+
+    public void setRaza(String raza) {
+        this.raza = raza;
+    }
+
+    public void setEsquemaVacunas(List<Vacuna> esquemaVacunas) {
+        this.esquemaVacunas = esquemaVacunas;
+    }
+    
+    
+    
 }

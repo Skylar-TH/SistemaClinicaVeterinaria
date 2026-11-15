@@ -17,6 +17,14 @@ public abstract class Mascota {
         this.historiaClinica=new HistorialMedico("HC-"+id,this);
     }
 
+    public HistorialMedico getHistorial() {
+        return historiaClinica;
+    }
+
+    public void setHistorial(HistorialMedico historiaClinica) {
+        this.historiaClinica= historiaClinica;
+    }
+    
     public String getId() {
         return id;
     }

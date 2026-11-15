@@ -19,7 +19,7 @@ public class Propietario extends Persona{
     }
     
     
-    public void agregarMascotasPropi(Mascota mascota) throws IllegalAccessException{
+    public void agregarMascotasPropi(Mascota mascota){
         if(mascota!=null && !this.mascotas.contains(mascota)){
           this.mascotas.add(mascota);
           
