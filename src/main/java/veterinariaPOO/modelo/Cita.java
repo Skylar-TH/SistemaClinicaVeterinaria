@@ -12,27 +12,30 @@ import java.time.LocalDateTime;
  */
 public class Cita {
     private String idCita;
-    private Recepcionista recepcionista;
     private Veterinario veterinario;
     private Mascota mascota;
     private LocalDateTime fecha;
     private String estado; // puede ser programada, cancelada o atendida
+    private Consulta consultaGenerada;
 
-    public Cita(String idCita, Recepcionista recepcionista, Veterinario veterinario, Mascota mascota, LocalDateTime fecha, String estado) {
+    public Cita(String idCita, Veterinario veterinario, Mascota mascota, LocalDateTime fecha, String estado) {
+        if (fecha == null || mascota == null || veterinario == null) {
+            throw new IllegalArgumentException("La fecha/hora, la mascota y el veterinario son obligatorios.");
+        }
         this.idCita = idCita;
-        this.recepcionista = recepcionista;
-        this.veterinario = veterinario;
-        this.mascota = mascota;
         this.fecha = fecha;
-        this.estado = estado;
+        if (estado != null && !estado.isBlank()) {
+             this.estado = estado;
+        } else {
+         this.estado = "PROGRAMADA";
+        }
+        this.mascota = mascota;
+        this.veterinario = veterinario;
+        this.consultaGenerada = null;
     }
-
+    
     public String getIdCita() {
         return idCita;
-    }
-
-    public Recepcionista getRecepcionista() {
-        return recepcionista;
     }
 
     public Veterinario getVeterinario() {
@@ -53,10 +56,6 @@ public class Cita {
 
     public void setIdCita(String idCita) {
         this.idCita = idCita;
-    }
-
-    public void setRecepcionista(Recepcionista recepcionista) {
-        this.recepcionista = recepcionista;
     }
 
     public void setVeterinario(Veterinario veterinario) {

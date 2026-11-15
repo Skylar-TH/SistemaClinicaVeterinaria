@@ -23,6 +23,7 @@ public class Consulta {
     private Mascota mascota;
     private Sedacion sedacion;
     
+    
 // ahorita corrijo que tengo que ir al mercado
     public Consulta(String idConsulta, String diagnostico, String notasMedicas, LocalDateTime fecha, double tarifaBase, Mascota mascota){
         if(tarifaBase<0){

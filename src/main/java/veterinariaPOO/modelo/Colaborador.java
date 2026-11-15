@@ -14,7 +14,10 @@ public abstract class Colaborador extends Persona{
     
     public Colaborador(String nombre, String telefono, String id, String email, double sueldo) {
         super(nombre, telefono, id, email);
-        this.sueldo= sueldo;
+        if(sueldo<0){
+        throw new IllegalArgumentException("El sueldo no puede ser negativo");
+        }
+         this.sueldo= sueldo;
     }
 
     public double getSueldo() {
@@ -22,6 +25,9 @@ public abstract class Colaborador extends Persona{
     }
 
     public void setSueldo(double sueldo) {
+        if(sueldo<0){
+        throw new IllegalArgumentException("El sueldo no puede ser negativo");
+        }
         this.sueldo = sueldo;
     }
     
