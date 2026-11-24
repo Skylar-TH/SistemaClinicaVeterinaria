@@ -43,8 +43,8 @@ public class HistorialMedico {
 
     public List<Consulta> getConsultas() {
         return Collections.unmodifiableList(consultas);
-        //Collections.unmodifiableList(consultas)es un metodo que permite
-        //leer la lista más no modificarla
+        /*Collections.unmodifiableList(consultas)es un metodo que permite
+        leer la lista más no modificarla*/
     }
     
     

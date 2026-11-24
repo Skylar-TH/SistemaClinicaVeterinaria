@@ -76,6 +76,8 @@ public class Sistema {
         }
     }
 
+    /*revisen que estos dos metodos los veo innecesarios porque el recepcionista verifica las instancias y
+     lo envia a agregar colaborador, lo que hace que el arreglo ya sepa quien es quien*/
     public void agregarRecepcionista(Recepcionista recepcionista) {
         agregarColaborador(recepcionista);
     }
@@ -98,12 +100,14 @@ public class Sistema {
         if (vacuna == null) {
             throw new IllegalArgumentException("La vacuna no puede ser nula");
         }
+        
         if (vacuna.getNombre() == null || vacuna.getNombre().isBlank()) {
             throw new IllegalArgumentException("El nombre de la vacuna es obligatorio");
         }
         if (vacuna.getCosto() < 0) {
             throw new IllegalArgumentException("El costo de la vacuna no puede ser negativo");
         }
+        
         for (Vacuna v : vacunas) {
             if (v.getNombre().equalsIgnoreCase(vacuna.getNombre())) {
                 throw new IllegalArgumentException("Ya existe una vacuna con ese nombre");
@@ -138,12 +142,16 @@ public class Sistema {
         return Collections.unmodifiableList(vacunas);
     }
 
+    /*
+    *las consultas no están guardadas en una lista propia: cada una vive dentro del HistorialMedico 
+    de su mascota
+    */
     public List<Consulta> getConsultas() {
         List<Consulta> todas = new ArrayList<>();
         for (Mascota m : mascotas) {
             todas.addAll(m.getHistorial().getConsultas());
         }
-
+//Ordena la lista de menor a mayor según el ID de la consulta.
         todas.sort(Comparator.comparing(Consulta::getIdConsulta));
         return todas;
     }

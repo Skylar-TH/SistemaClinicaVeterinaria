@@ -42,7 +42,7 @@ public class Pago {
        
     }
 
-    public String imprimirComprobante(){
+    public String imprimirComprobante(Recepcionista recepcionista){
          DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         StringBuilder sb = new StringBuilder();
         sb.append("           COMPROBANTE DE PAGO         \n");
@@ -52,6 +52,7 @@ public class Pago {
         sb.append("Fecha consulta: ").append(this.consulta.getFecha().format(formato)).append("\n");
         sb.append("Propietario: ").append(this.propietario.getNombre()).append("\n");
         sb.append("Mascota: ").append(this.consulta.getMascota().getNombre()).append("\n");
+        sb.append("Recepcionista: ").append(recepcionista.getNombre()).append("\n");
         sb.append("Veterinario: ").append(this.consulta.getVeterinario().getNombre()).append("\n");
         sb.append("-----------------------------------------\n");
         sb.append(String.format("Tarifa base: $ %,.2f%n", this.consulta.getTarifaBase()));

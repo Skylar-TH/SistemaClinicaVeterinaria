@@ -13,6 +13,7 @@ public class Vacuna {
     private double costo;
 
     public Vacuna(String nombre, double costo) {
+        
         this.nombre = nombre;
         this.costo = costo;
     }

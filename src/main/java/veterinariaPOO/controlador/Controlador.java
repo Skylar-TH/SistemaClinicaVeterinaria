@@ -268,7 +268,7 @@ public class Controlador implements ActionListener {
         String idPago = "PAG-" + String.format("%03d", sistema.getPagos().size() + 1);
         Pago pago = recepcionista.realizarCobro(sistema, idPago, consulta);
 
-        vista.setFactura(pago.imprimirComprobante());
+        vista.setFactura(pago.imprimirComprobante(recepcionista));
         actualizarPendientes();
     }
 
