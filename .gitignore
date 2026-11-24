@@ -1,1 +1,5 @@
-/target/
+target/
+build/
+dist/
+*.zip
+nbproject/private/
