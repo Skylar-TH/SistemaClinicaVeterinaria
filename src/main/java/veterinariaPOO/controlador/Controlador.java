@@ -37,7 +37,9 @@ public class Controlador implements ActionListener {
 
         try {
             switch (comando) {
-                case "REGISTRAR_PERSONA" ->
+                case "REGISTRAR_PROPIETARIO" ->
+                    registrarPropietario();
+                case "REGISTRAR_COLABORADOR" ->
                     registrarPersona();
                 case "REGISTRAR_MASCOTA" ->
                     registrarMascota();
@@ -73,6 +75,25 @@ public class Controlador implements ActionListener {
 
     
     
+    private void registrarPropietario(){
+        String id = vista.getTxtIdPropietario().trim();
+        String nombre= vista.getTxtNombrePropietario().trim();
+        String email= vista.getTxtEmailPropietario().trim();
+        String telefono= vista.getTxtTelefonoPropietario().trim();
+        
+        recepcionista.registrarPropietario(sistema, id, nombre, telefono, email);
+
+        vista.limpiarFormularioPropietario();
+        actualizarListas();
+        vista.mostrarMensaje("Propietario registrado correctamente");
+        
+        
+        
+    }
+    
+    
+    
+    // colaboradores
     private void registrarPersona() {
         String tipo = vista.getTipoPersona();
         String id = vista.getTxtID().trim();
@@ -81,10 +102,7 @@ public class Controlador implements ActionListener {
         String email = vista.getTxtEmeil().trim();
         Colaborador nuevoColaborador;
 
-        if ("Propietario".equals(tipo)) {
-            recepcionista.registrarPropietario(sistema, id, nombre, telefono, email);
-
-        } else if ("Recepcionista".equals(tipo)) {
+        if("Recepcionista".equals(tipo)) {
             Recepcionista recepcionista2 = new Recepcionista(nombre, telefono, id, email, 0);
             nuevoColaborador = recepcionista2;
 
