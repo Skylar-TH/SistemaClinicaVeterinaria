@@ -8,9 +8,18 @@ public abstract class Mascota {
     private Propietario propietario;
     private HistorialMedico historiaClinica;
 
-    public Mascota(String id, String nombre, int edad, double peso, Propietario propietario, HistorialMedico historiaClinica) {
+    public Mascota(String id, String nombre, int edad, double peso, Propietario propietario) {
+       if (nombre == null || nombre.isBlank()) {
+        throw new IllegalArgumentException("El nombre de la mascota es obligatorio");
+        }
+    if (edad <= 0) {
+        throw new IllegalArgumentException("La edad no puede ser negativa");
+    }
+    if (peso <= 0) {
+        throw new IllegalArgumentException("El peso debe ser mayor a 0");
+    }
         this.id = id;
-        this.nombre = nombre;
+        this.nombre = nombre.trim();
         this.edad = edad;
         this.peso = peso;
         this.propietario = propietario;

@@ -8,16 +8,17 @@ package veterinariaPOO.modelo;
  *
  * @author Usuario
  */
-public abstract class Colaborador extends Persona{
+public abstract class Colaborador extends Persona {
+
     // Solo lo vamos a tomar como atributo
-    private double sueldo;
-    
+    double sueldo;
+
     public Colaborador(String nombre, String telefono, String id, String email, double sueldo) {
         super(nombre, telefono, id, email);
-        if(sueldo<0){
-        throw new IllegalArgumentException("El sueldo no puede ser negativo");
+        if (sueldo < 0) {
+            throw new IllegalArgumentException("El sueldo no puede ser negativo");
         }
-         this.sueldo= sueldo;
+        this.sueldo = sueldo;
     }
 
     public double getSueldo() {
@@ -25,11 +26,10 @@ public abstract class Colaborador extends Persona{
     }
 
     public void setSueldo(double sueldo) {
-        if(sueldo<0){
-        throw new IllegalArgumentException("El sueldo no puede ser negativo");
+        if (sueldo < 0) {
+            throw new IllegalArgumentException("El sueldo no puede ser negativo");
         }
         this.sueldo = sueldo;
     }
-    
-    
+
 }

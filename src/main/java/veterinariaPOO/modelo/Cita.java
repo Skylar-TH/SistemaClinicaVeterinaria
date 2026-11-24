@@ -14,26 +14,46 @@ public class Cita {
     private String idCita;
     private Veterinario veterinario;
     private Mascota mascota;
-    private LocalDateTime fecha;
-    private String estado; // puede ser programada, cancelada o atendida
+    private LocalDateTime fechaHora;
+    private boolean estado; // false para programada, true para atendida
     private Consulta consultaGenerada;
+    private Recepcionista recepcionista;
 
-    public Cita(String idCita, Veterinario veterinario, Mascota mascota, LocalDateTime fecha, String estado) {
-        if (fecha == null || mascota == null || veterinario == null) {
-            throw new IllegalArgumentException("La fecha/hora, la mascota y el veterinario son obligatorios.");
+    public Cita(String idCita, Veterinario veterinario, Mascota mascota, LocalDateTime fechaHora, boolean estado, Recepcionista recepcionista) {
+        if (idCita.isEmpty() || idCita.isBlank()) {
+            throw new IllegalArgumentException("El ID de la cita no puede estar vacío.");
         }
         this.idCita = idCita;
-        this.fecha = fecha;
-        if (estado != null && !estado.isBlank()) {
-             this.estado = estado;
-        } else {
-         this.estado = "PROGRAMADA";
-        }
+        this.fechaHora = fechaHora;
+        this.estado = estado;
         this.mascota = mascota;
         this.veterinario = veterinario;
         this.consultaGenerada = null;
+        this.recepcionista= recepcionista;
     }
     
+    public void agregarConsulta(Consulta consulta){
+        if(estado){
+            throw new IllegalArgumentException("La cita ya fue atendida");
+        }
+        
+        if(consulta.getMascota()!=this.mascota || consulta.getVeterinario()!= this.veterinario){
+            throw new IllegalArgumentException("La mascota debe coincidir con el veterinario del que ha sido atendido");
+        }
+        
+        this.consultaGenerada= consulta;
+        this.estado= true;
+    }
+    
+    /**
+     *public eliminarCita(Consulta) 
+     * 
+    */
+    
+    public Recepcionista getRecepcionista() {
+        return recepcionista;
+    }
+
     public String getIdCita() {
         return idCita;
     }
@@ -47,10 +67,10 @@ public class Cita {
     }
 
     public LocalDateTime getFecha() {
-        return fecha;
+        return fechaHora;
     }
 
-    public String getEstado() {
+    public boolean getEstado() {
         return estado;
     }
 
@@ -67,10 +87,10 @@ public class Cita {
     }
 
     public void setFecha(LocalDateTime fecha) {
-        this.fecha = fecha;
+        this.fechaHora = fecha;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(boolean estado) {
         this.estado = estado;
     }
     

@@ -21,22 +21,26 @@ public class Consulta {
     private LocalDateTime fecha;
     private double tarifaBase;
     private Mascota mascota;
-    private Sedacion sedacion;
+    private boolean usoSedacion;
+    private double costoSedacion;
+    private Veterinario veterinario;
     
     
 // ahorita corrijo que tengo que ir al mercado
-    public Consulta(String idConsulta, String diagnostico, String notasMedicas, LocalDateTime fecha, double tarifaBase, Mascota mascota){
+    public Consulta(String idConsulta, String diagnostico, String notasMedicas, LocalDateTime fecha, double tarifaBase, Mascota mascota, Veterinario veterinario){
         if(tarifaBase<0){
             throw new IllegalArgumentException("La tarifa base no puede ser negativa.");
         }
-        this.sedacion= null;
+        this.usoSedacion = false;
+        this.costoSedacion = 0.0;
         this.vacunasAplicadas = new ArrayList<>();
         this.idConsulta = idConsulta;
-        this.diagnostico = diagnostico;
-        this.notasMedicas = notasMedicas;
+        setDiagnostico(diagnostico);
+        setNotasMedicas(notasMedicas);
         this.fecha = fecha;
         this.tarifaBase = tarifaBase;
         this.mascota= mascota;
+        this.veterinario= veterinario;
         
     }
     
@@ -44,31 +48,46 @@ public class Consulta {
         if (vacuna == null) {
             throw new IllegalArgumentException("La vacuna no puede ser nula.");
         }
+        // solo las mascotas convencionales llevan vacunas (y su esquema)
+        if (!(this.mascota instanceof MascotaConvencional)) {
+            throw new IllegalArgumentException("Solo las mascotas convencionales reciben vacunas.");
+        }
         this.vacunasAplicadas.add(vacuna);
+        ((MascotaConvencional) this.mascota).agregarVacunas(vacuna);
     }
 
-    // Asigna la sedación aplicada en esta consulta (si la hubo)
-    public void aplicarSedacion(Sedacion sedacion) {
-        if (sedacion == null) {
-            throw new IllegalArgumentException("La sedación no puede ser nula.");
+   
+    public void aplicarSedacion(double costoInsumos) {
+        if (!(this.mascota instanceof MascotaExotica)) {
+            throw new IllegalArgumentException("Solo las mascotas exoticas llevan sedacion.");
         }
-        this.sedacion = sedacion;
+        if (costoInsumos < 0) {
+            throw new IllegalArgumentException("El costo de los insumos no puede ser negativo.");
+        }
+        this.usoSedacion = true;
+        this.costoSedacion = costoInsumos;
+    }
+    
+    public double calcularRecargo() {
+        return this.mascota.CalcularRecargoBase(this.tarifaBase);
+    }
+    
+    public double calcularCostoVacunas() {
+        double total = 0.0;
+        for (Vacuna v : vacunasAplicadas) {
+            total += v.getCosto();
+        }
+        return total;
     }
     
     public double calcularTotalConsulta(){
-        double total= this.tarifaBase+this.mascota.CalcularRecargoBase(tarifaBase);
-        for(Vacuna v : vacunasAplicadas){
-            total+= v.getCosto();
-            return total;
-        }
-        
-        if(this.sedacion!=null){
-            total+= this.sedacion.getCosto();
-            return total;
-        }
-       return total;
+        return this.tarifaBase + calcularRecargo() + calcularCostoVacunas() + getCostoSedacion();
     }
 
+    public Veterinario getVeterinario() {
+        return veterinario;
+    }
+    
     public String getIdConsulta() {
         return idConsulta;
     }
@@ -93,11 +112,59 @@ public class Consulta {
         return mascota;
     }
 
-    public Sedacion getSedacion() {
-        return sedacion;
+    public boolean isUsoSedacion() {
+        return usoSedacion;
+    }
+
+    public double getCostoSedacion() {
+        if (usoSedacion) {
+            return costoSedacion;
+        }
+        return 0.0;
     }
     
     public List<Vacuna> getVacunasAplicadas() {
         return Collections.unmodifiableList(vacunasAplicadas);
     }
+
+    public void setVacunasAplicadas(List<Vacuna> vacunasAplicadas) {
+        this.vacunasAplicadas = vacunasAplicadas;
+    }
+
+    public void setIdConsulta(String idConsulta) {
+        this.idConsulta = idConsulta;
+    }
+
+    public void setDiagnostico(String diagnostico) {
+        if(diagnostico== null || diagnostico.isBlank()){
+            throw new IllegalArgumentException("El diagnostico debe ser ingresado");
+        }
+        this.diagnostico = diagnostico;
+    }
+
+    public void setNotasMedicas(String notasMedicas) {
+        if(notasMedicas== null || notasMedicas.isBlank()){
+            throw new IllegalArgumentException("Debe ingresar las notas medicas");
+        }
+        this.notasMedicas = notasMedicas;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
+    }
+
+    public void setTarifaBase(double tarifaBase) {
+        this.tarifaBase = tarifaBase;
+    }
+
+    public void setMascota(Mascota mascota) {
+        this.mascota = mascota;
+    }
+
+    
+    
+
+ 
+    
+    
 }

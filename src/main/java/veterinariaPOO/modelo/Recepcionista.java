@@ -9,85 +9,101 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-//listam son las mascotas 
-// listap son propietarios
-public class Recepcionista extends Colaborador{
-    
-    
+public class Recepcionista extends Colaborador {
+
     private final List<Pago> pagos;
     private final List<Cita> citas;
 
-    public Recepcionista(String nombre, String telefono, String id, String email, List<Cita> citas, List<Pago> pagos) {
+    public Recepcionista(String nombre, String telefono, String id, String email, double sueldo) {
         super(nombre, telefono, id, email, sueldo);
-        this.citas=new ArrayList<>();
-        this.pagos= new ArrayList<>();
+        this.pagos = new ArrayList<>();
+        this.citas = new ArrayList<>();
     }
-    
-   
-    // los sueños si se cumplen solo tienes que ser uso de el, pensarlos en grande, siempre dar mas de lo suficiente, y entender que más alla de todo debo agradecer
-    // y no dejar tampoco de lado aquellas cosas que quiero hacer 
-    public void agendarCita(Sistema sistema, String idCita,  Veterinario veterinario, Mascota mascota,LocalDateTime fecha){
-  if (sistema == null || mascota == null || veterinario == null) {
-            throw new IllegalArgumentException("El sistema, la mascota y el veterinario son obligatorios.");
+
+    public Cita agendarCita(Sistema sistema, String idCita, Veterinario veterinario, Mascota mascota, LocalDateTime fechaHora, Recepcionista recepcionista) {
+        if (sistema == null || mascota == null || veterinario == null || fechaHora == null ) {
+            throw new IllegalArgumentException("El sistema, la mascota, el veterinario, la fecha/hora");
         }
-        Cita nuevaCita = new Cita(idCita, veterinario, mascota, fecha, "PROGRAMADA");
-        this.citas.add(nuevaCita);
-        veterinario.asignarCita;
+        Cita nuevaCita = new Cita(idCita, veterinario, mascota, fechaHora, false,recepcionista);
         sistema.agregarCita(nuevaCita);
+        this.citas.add(nuevaCita);
+        veterinario.asignarCita(nuevaCita);
+
         return nuevaCita;
     }
-    
-    public void registrarPropietario(Sistema sistema, String id, String nombre, String telefono, String direccion, boolean tieneDescuento){
-        if (sistema == null) {
-            throw new IllegalArgumentException("El sistema no puede ser nulo.");
-        }
-        Propietario nuevoPropietario = new Propietario(id, nombre, telefono, direccion, tieneDescuento);
+
+    public Propietario registrarPropietario(Sistema sistema, String id, String nombre, String telefono, String email) {
+        
+        Propietario nuevoPropietario = new Propietario(nombre, telefono, id, email);
         sistema.agregarPropietario(nuevoPropietario);
         return nuevoPropietario;
     }
-    
-    public void registrarMascota(Sistema sistema, Propietario propietario, Mascota mascota)  throws IllegalAccessException{
+
+    public void registrarMascota(Sistema sistema, Propietario propietario, Mascota mascota) {
         if (sistema == null || propietario == null || mascota == null) {
-            throw new IllegalArgumentException("El sistema, el propietario y la mascota son obligatorios.");
+            throw new IllegalArgumentException("El sistema, el propietario y la mascota son obligatorios");
         }
-        propietario.agregarMascota(mascota);
+        // ((MascotaConvencional) mascota).getRaza() surgio al poner mascota.getraza();
+        if (mascota instanceof MascotaConvencional) {
+            String raza= ((MascotaConvencional) mascota).getRaza();
+            if(raza.isBlank() || raza.isEmpty()){
+            throw new IllegalArgumentException("La raza es obligatoria");
+            }
+        }
         sistema.agregarMascota(mascota);
-       
+        propietario.agregarMascotasPropia(mascota);
+
     }
-    
-    public void realizarCobro(Sistema sistema, String idPago, Consulta consulta, Propietario propietario) {
-    if (sistema == null || consulta == null || propietario == null) {
+
+    public Pago realizarCobro(Sistema sistema, String idPago, Consulta consulta) {
+        if (sistema == null || consulta == null) {
             throw new IllegalArgumentException("El sistema, la consulta y el propietario son obligatorios.");
         }
-        Pago nuevoPago = new Pago(idPago, consulta, propietario);
-        this.pagosRegistrados.add(nuevoPago);
+
+        Mascota mascota = consulta.getMascota();
+        if (mascota == null || mascota.getPropietario() == null) {
+            throw new IllegalArgumentException("La mascota o el propietario no puede ser nulos");
+        }
+        Propietario propietario = mascota.getPropietario();
+        Pago nuevoPago = new Pago(idPago, propietario, consulta);
         sistema.agregarPago(nuevoPago);
+        this.pagos.add(nuevoPago);
+        nuevoPago.calcularPago();
         return nuevoPago;
     }
 
-   
-    public void registrarColaborador (Colaborador colaborador) throws IllegalAccessException {
-       if (sistema == null || nuevoColaborador == null) {
+    public void registrarColaborador(Sistema sistema, Colaborador nuevoColaborador){
+        
+        if(sistema==null || nuevoColaborador==null){
+           throw new IllegalArgumentException("El sistema y el colaborador son obligatorios");
+        }
+        
+        if(nuevoColaborador instanceof Recepcionista){
+            sistema.agregarColaborador(nuevoColaborador);
+        }
+        
+        if(nuevoColaborador instanceof Veterinario){
+            
+          String especialidad= ((Veterinario) nuevoColaborador).getEspecialidad();
+          String tarjeta= ((Veterinario) nuevoColaborador).getTarjetaProfesional();
+          
+        if (especialidad.isEmpty() || tarjeta.isEmpty()) {
+                throw new IllegalArgumentException("La especialidad y la tarjeta profesional son obligatorias");
+            }
+        if (sistema == null || nuevoColaborador == null) {
             throw new IllegalArgumentException("El sistema y el nuevo colaborador son obligatorios.");
         }
         sistema.agregarColaborador(nuevoColaborador);
+        }
     }
-    
-   public List<Cita> getCitasAgendadas() {
-        return Collections.unmodifiableList(citasAgendadas);
+
+    public List<Cita> getCitasAgendadas() {
+        return Collections.unmodifiableList(citas);
     }
 
     public List<Pago> getPagosRegistrados() {
-        return Collections.unmodifiableList(pagosRegistrados);
+        return Collections.unmodifiableList(pagos);
     }
-    
-    // aqui me falta indicarlo con el metodo este de que action escucha y selecciona para borrar
-    public void eliminar(int posicion){
-        listam.remove(posicion);
-    }
-    
-    
-    
-    
+
     
 }

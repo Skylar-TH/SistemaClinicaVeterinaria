@@ -11,25 +11,27 @@ import java.util.List;
  *
  * @author Usuario
  */
-public class Propietario extends Persona{
+public class Propietario extends Persona {
+
     private List<Mascota> mascotas;
-    public Propietario(String nombre, String telefono, String id, String email,List<Mascota> mascotas) {
+
+    public Propietario(String nombre, String telefono, String id, String email) {
         super(nombre, telefono, id, email);
-        this.mascotas= new ArrayList<>();
+        this.mascotas = new ArrayList<>();
     }
-    
-    
-    public void agregarMascotasPropi(Mascota mascota){
-        if(mascota!=null && !this.mascotas.contains(mascota)){
-          this.mascotas.add(mascota);
-          
-          mascota.setPropietario(this);
+
+    public void agregarMascotasPropia(Mascota mascota) {
+        if (mascota != null && !this.mascotas.contains(mascota)) {
+            this.mascotas.add(mascota);
+
+            mascota.setPropietario(this);
         }
     }
-    public boolean tieneDerechoDescuento(){
-         if (mascotas.size() > 2) {
-        return true;
-        } 
+
+    public boolean tieneDerechoDescuento() {
+        if (mascotas.size() > 2) {
+            return true;
+        }
         return false;
     }
 
@@ -40,7 +42,5 @@ public class Propietario extends Persona{
     public void setMascotas(List<Mascota> mascotas) {
         this.mascotas = mascotas;
     }
-    
-    
-    
+
 }

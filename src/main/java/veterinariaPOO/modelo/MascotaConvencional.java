@@ -15,11 +15,12 @@ public class MascotaConvencional extends Mascota{
     private String raza;
     private List<Vacuna> esquemaVacunas;
 
-    public MascotaConvencional(String id, String nombre, int edad, double peso, Propietario propietario, HistorialMedico historiaClinica) {
-        super(id, nombre, edad, peso, propietario, historiaClinica);
+    public MascotaConvencional(String id, String nombre, int edad, double peso, Propietario propietario, String raza) {
+        super(id, nombre, edad, peso, propietario);
         this.esquemaVacunas = new ArrayList<>();
+        this.raza = raza;
     }
-//hora
+
     @Override
     public double CalcularRecargoBase(double tarifaBase) {
         return 0.0;

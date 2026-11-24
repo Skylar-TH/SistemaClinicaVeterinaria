@@ -5,6 +5,7 @@
 package veterinariaPOO.modelo;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -18,20 +19,15 @@ public class Pago {
     private double descuento;
     private Consulta consulta;
     private Propietario propietario;
+    
 
     public Pago(String idPago, Propietario propietario, Consulta consulta) {
-        if(consulta==null || propietario==null){
-            throw new IllegalArgumentException("La consulta y el propietario no pueden estar vacios");
-        }
+       
         this.idPago = idPago;
         this.fechaPago = LocalDateTime.now();
-        this.subtotal = subtotal;
-        this.total = total;
-        this.descuento = descuento;
         this.consulta = consulta;
         this.propietario= propietario;
-        
-        calcularPago();
+
     }
     
     public void calcularPago(){
@@ -43,16 +39,41 @@ public class Pago {
             this.descuento=0.0;
         }
         this.total=this.subtotal-this.descuento;
-    }
-    
-    // terminar
-    public String imprimirComprobante(){
-        return " COMPROBANTE"
-                + "ID pago:"+this.getIdPago()
-                + " Fecha pago:"+this.getFechaPago()
-                + " Consulta: ";
+       
     }
 
+    public String imprimirComprobante(){
+         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        StringBuilder sb = new StringBuilder();
+        sb.append("           COMPROBANTE DE PAGO         \n");
+        sb.append("ID pago: ").append(this.idPago).append("\n");
+        sb.append("Fecha pago: ").append(this.fechaPago.format(formato)).append("\n");
+        sb.append("Consulta: ").append(this.consulta.getIdConsulta()).append("\n");
+        sb.append("Fecha consulta: ").append(this.consulta.getFecha().format(formato)).append("\n");
+        sb.append("Propietario: ").append(this.propietario.getNombre()).append("\n");
+        sb.append("Mascota: ").append(this.consulta.getMascota().getNombre()).append("\n");
+        sb.append("Veterinario: ").append(this.consulta.getVeterinario().getNombre()).append("\n");
+        sb.append("-----------------------------------------\n");
+        sb.append(String.format("Tarifa base: $ %,.2f%n", this.consulta.getTarifaBase()));
+        if (this.consulta.calcularRecargo() > 0) {
+            sb.append(String.format("Recargo mascota exotica (25%%): $ %,.2f%n", this.consulta.calcularRecargo()));
+        }
+        for (Vacuna v : this.consulta.getVacunasAplicadas()) {
+            sb.append(String.format("Vacuna %s: $ %,.2f%n", v.getNombre(), v.getCosto()));
+        }
+        if (this.consulta.isUsoSedacion()) {
+            sb.append(String.format("Insumos de sedacion: $ %,.2f%n", this.consulta.getCostoSedacion()));
+        }
+        sb.append("-----------------------------------------\n");
+        sb.append(String.format("Subtotal: $ %,.2f%n", this.subtotal));
+        if (this.descuento > 0) {
+            sb.append(String.format("Descuento (10%% por mas de 2 mascotas): - $ %,.2f%n", this.descuento));
+        }
+        sb.append(String.format("TOTAL A PAGAR: $ %,.2f%n", this.total));
+        return sb.toString();
+    }
+
+    
     public String getIdPago() {
         return idPago;
     }

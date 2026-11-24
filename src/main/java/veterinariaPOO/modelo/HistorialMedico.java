@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+// version version tablero
 /**
  *
  * @author Usuario
@@ -23,12 +23,12 @@ public class HistorialMedico {
         this.idHistorial = idHistorial;
         this.mascota= mascota;
         this.consultas= new ArrayList<>();
-        // no se crea dentro del constructor por la cardinalidad
+        
     }
     
     // a esas consultas les voy a pasar su historial
-    public Consulta registrarConsulta(String idConsulta, String diagnostico, String notasMedicas, LocalDateTime fecha, double tarifaBase){
-        Consulta nuevaconsulta = new Consulta(idConsulta, diagnostico, notasMedicas, fecha, tarifaBase, this.mascota);
+    public Consulta registrarConsulta(String idConsulta, String diagnostico, String notasMedicas, LocalDateTime fecha, double tarifaBase, Veterinario veterinario){
+        Consulta nuevaconsulta = new Consulta(idConsulta, diagnostico, notasMedicas, fecha, tarifaBase, this.mascota, veterinario);
         this.consultas.add(nuevaconsulta);
         return nuevaconsulta; 
     }
