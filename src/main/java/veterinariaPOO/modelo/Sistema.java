@@ -13,6 +13,7 @@ public class Sistema {
 
     private final List<Cita> citas;
     private final List<Pago> pagos;
+    private final List<Consulta> consultas;
     private final List<Mascota> mascotas;
     private final List<Propietario> propietarios;
     private final List<Colaborador> colaboradores;
@@ -25,6 +26,7 @@ public class Sistema {
     public Sistema() {
         this.citas = new ArrayList<>();
         this.pagos = new ArrayList<>();
+        this.consultas= new ArrayList<>();
         this.mascotas = new ArrayList<>();
         this.propietarios = new ArrayList<>();
         this.colaboradores = new ArrayList<>();
@@ -74,6 +76,13 @@ public class Sistema {
         if (pago != null && !this.pagos.contains(pago)) {
             this.pagos.add(pago);
         }
+    }
+    
+    public void agregarConsulta(Consulta nuevaConsulta){
+        if(nuevaConsulta!= null && !this.consultas.contains(nuevaConsulta)){
+            this.consultas.add(nuevaConsulta);
+        }
+        
     }
 
     /*revisen que estos dos metodos los veo innecesarios porque el recepcionista verifica las instancias y
@@ -155,7 +164,7 @@ public class Sistema {
         todas.sort(Comparator.comparing(Consulta::getIdConsulta));
         return todas;
     }
-// reemplaza al listarconsultas--// pendientes--//
+// reemplaza al listarconsultas--// pendientes por facturar
 
     public List<Consulta> listarConsultasPendientes() {
         List<Consulta> pendientes = new ArrayList<>();
@@ -166,7 +175,7 @@ public class Sistema {
         }
         return pendientes;
     }
-    // ---- CitasPendientes-----//
+    // ---- CitasPendientes-----por consulta
     public List<Cita> getCitasPendientes() {
     List<Cita> pendientes = new ArrayList<>();
     for (Cita c : citas) {

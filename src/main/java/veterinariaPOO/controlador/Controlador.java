@@ -100,17 +100,19 @@ public class Controlador implements ActionListener {
         String nombre = vista.getTxtNombrePersona().trim();
         String telefono = vista.getTxtTelefono().trim();
         String email = vista.getTxtEmeil().trim();
+        double salario = leerDecimal(vista.getTxtSalario(), "El salario");
+        
         Colaborador nuevoColaborador;
 
         if("Recepcionista".equals(tipo)) {
-            Recepcionista recepcionista2 = new Recepcionista(nombre, telefono, id, email, 0);
+            Recepcionista recepcionista2 = new Recepcionista(nombre, telefono, id, email, salario);
             nuevoColaborador = recepcionista2;
 
             recepcionista.registrarColaborador(sistema, nuevoColaborador);
         } else {
             String especialidad = vista.getTxtEspecialidad().trim();
             String tarjeta = vista.getTxtTarjetaProfecional().trim();
-            Veterinario veterinario = new Veterinario(especialidad, tarjeta, nombre, telefono, id, email, 0);
+            Veterinario veterinario = new Veterinario(especialidad, tarjeta, nombre, telefono, id, email, salario);
             nuevoColaborador = veterinario;
 
             recepcionista.registrarColaborador(sistema, nuevoColaborador);
@@ -150,6 +152,7 @@ public class Controlador implements ActionListener {
                     esquema.add(sistema.buscarVacuna(nombreVacuna.trim()));
                 }
             }
+            
             for (Vacuna v : esquema) {
                 convencional.agregarVacunas(v);
             }
@@ -255,7 +258,7 @@ public class Controlador implements ActionListener {
     }
 
     String id = "CON-" + String.format("%03d", sistema.getConsultas().size() + 1);
-    Consulta consulta = veterinario.registrarConsulta(mascota.getHistorial(), id, diagnostico, notas, fecha, sistema.getTarifaBase());
+    Consulta consulta = veterinario.registrarConsulta(sistema,mascota.getHistorial(), id, diagnostico, notas, fecha, sistema.getTarifaBase());
     if (vacuna != null) {
         veterinario.registrarVacunas(consulta, vacuna);
     }

@@ -11,13 +11,11 @@ import java.util.List;
 
 public class Recepcionista extends Colaborador {
 
-    private final List<Pago> pagos;
-    private final List<Cita> citas;
+   
 
     public Recepcionista(String nombre, String telefono, String id, String email, double sueldo) {
         super(nombre, telefono, id, email, sueldo);
-        this.pagos = new ArrayList<>();
-        this.citas = new ArrayList<>();
+        
     }
 
     public Cita agendarCita(Sistema sistema, String idCita, Veterinario veterinario, Mascota mascota, LocalDateTime fechaHora, Recepcionista recepcionista) {
@@ -26,8 +24,8 @@ public class Recepcionista extends Colaborador {
         }
         Cita nuevaCita = new Cita(idCita, veterinario, mascota, fechaHora, false,recepcionista);
         sistema.agregarCita(nuevaCita);
-        this.citas.add(nuevaCita);
-        veterinario.asignarCita(nuevaCita);
+        
+        
 
         return nuevaCita;
     }
@@ -67,7 +65,6 @@ public class Recepcionista extends Colaborador {
         Propietario propietario = mascota.getPropietario();
         Pago nuevoPago = new Pago(idPago, propietario, consulta);
         sistema.agregarPago(nuevoPago);
-        this.pagos.add(nuevoPago);
         nuevoPago.calcularPago();
         return nuevoPago;
     }
@@ -90,20 +87,12 @@ public class Recepcionista extends Colaborador {
         if (especialidad.isEmpty() || tarjeta.isEmpty()) {
                 throw new IllegalArgumentException("La especialidad y la tarjeta profesional son obligatorias");
             }
-        if (sistema == null || nuevoColaborador == null) {
-            throw new IllegalArgumentException("El sistema y el nuevo colaborador son obligatorios.");
-        }
+        
         sistema.agregarColaborador(nuevoColaborador);
         }
     }
 
-    public List<Cita> getCitasAgendadas() {
-        return Collections.unmodifiableList(citas);
-    }
-
-    public List<Pago> getPagosRegistrados() {
-        return Collections.unmodifiableList(pagos);
-    }
+   
 
     
 }
